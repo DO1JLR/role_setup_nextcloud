@@ -22,6 +22,7 @@
   user:
     name:   "{{ web_user[ansible_distribution] }}"
     groups: redis
+  notify: restart redis-server
 
 - name: start and enable redis
   become: true
