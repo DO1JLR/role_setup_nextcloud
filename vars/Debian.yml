@@ -1,0 +1,16 @@
+---
+
+nextcloud_required_packages:
+ - zip
+ - unzip
+ - bzip2
+ - screen
+ - curl
+ - ffmpeg
+ - imagemagick
+ - ghostscript
+ - libfile-fcntllock-perl
+ - software-properties-common
+ - apt-transport-https
+ - facter
+

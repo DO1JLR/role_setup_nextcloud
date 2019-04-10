@@ -1,0 +1,59 @@
+---
+- name: Disable SELinux - because I am to lazy to develop it for RHEL
+  become: true
+  selinux:
+    state: permissive
+    policy: targeted
+  when: ansible_os_family == "RedHat"
+
+- name: add epel repo
+  become: true
+  yum_repository:
+    name: epel
+    description: Extra Packages for Enterprise Linux 7 - $basearch
+    mirrorlist: https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch
+    gpgkey: https://getfedora.org/static/352C64E5.txt
+    gpgcheck: yes
+    failovermethod: priority
+    enabled: 1
+  when: 
+    - ansible_distribution == 'CentOS'
+    - ansible_distribution == 'RedHat'
+
+- name: update RHEL os
+  become: true
+  yum:
+    name: '*'
+    update_cache: true
+    state: latest
+  when: ansible_os_family == "RedHat"
+
+- name: apt dist-upgrade
+  become: true
+  apt:
+    upgrade: dist
+    autoremove: true
+  when: ansible_os_family == "Debian"
+
+- name: Install Nextcloud packages
+  become: true
+  package:
+    name: "{{ nextcloud_required_packages }}"
+    state: present
+
+
+- name: Create some local folders with good permissions
+  file:
+    name: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - { path: '/usr/local/tmp/apc',      owner: '{{ web_user[ansible_distribution] }}', group: 'root', mode: '1777' }
+    - { path: '/usr/local/tmp/sessions', owner: '{{ web_user[ansible_distribution] }}', group: 'root', mode: '1777' }
+    - { path: '/usr/local/tmp/cache',    owner: '{{ web_user[ansible_distribution] }}', group: 'root', mode: '1777' }
+
+
+
+

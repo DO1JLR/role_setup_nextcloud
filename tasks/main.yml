@@ -1,0 +1,11 @@
+---
+
+- name: set os-family specific variables
+  include_vars: '{{ ansible_os_family  }}.yml'
+
+- name: include nextcloud requirement installation
+  become: yes
+  include_tasks: "install_nextcloud_requirements_and_permissions.yml"
+  when: nextcloud_install_requirements
+
+

@@ -1,0 +1,6 @@
+---
+
+# install requirements and setup permissions for nextcloud
+nextcloud_install_requirements: true
+
+
