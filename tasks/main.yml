@@ -8,4 +8,9 @@
   include_tasks: "install_nextcloud_requirements_and_permissions.yml"
   when: nextcloud_install_requirements
 
+- name: include redis installation and setup
+  become: yes
+  include_tasks: "setup_redis.yml"
+  when: nextcloud_install_redis
+
 

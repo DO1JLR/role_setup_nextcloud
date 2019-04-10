@@ -30,4 +30,8 @@ imagemagick_xml_path:
   Ubuntu: /etc/ImageMagick-6/policy.xml
   Debian: /etc/ImageMagick-6/policy.xml
 
+redis_conf_path:
+  'RedHat': '/etc'
+  'Debian': '/etc/redis'
+
 
