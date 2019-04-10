@@ -5,6 +5,7 @@ nextcloud_required_packages:
  - unzip
  - bzip2
  - screen
+ - tmux
  - curl
  - ffmpeg
  - imagemagick
@@ -14,3 +15,5 @@ nextcloud_required_packages:
  - apt-transport-https
  - facter
 
+redis_package: 
+  - redis-server

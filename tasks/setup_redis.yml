@@ -1,6 +1,13 @@
 ---
 
+- name: Install Redis Server
+  become: true
+  package:
+    name: "{{ redis_package }}"
+    state: present
+
 - name: configure redis
+  become: true
   copy:
     src: redis.conf
     dest: "{{ redis_conf_path[ansible_os_family] }}/redis.conf"

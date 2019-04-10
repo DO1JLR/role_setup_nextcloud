@@ -17,3 +17,5 @@ nextcloud_required_packages:
   - facter
   - policycoreutils-python
 
+redis_package:
+  - redis
