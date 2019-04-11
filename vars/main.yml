@@ -34,4 +34,8 @@ redis_conf_path:
   'RedHat': '/etc'
   'Debian': '/etc/redis'
 
+php_socket:
+  'RedHat': '/run/php-fpm/php{{ php_version }}-fpm.sock'
+  'Debian': '/run/php/php{{ php_version }}-fpm.sock'
 
+dhparam_path:     /etc/nextcloud/dhparam/dhparam.pem

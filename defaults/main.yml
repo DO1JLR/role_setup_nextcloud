@@ -6,3 +6,17 @@ nextcloud_install_requirements: true
 # setup and install redis
 nextcloud_install_redis: true
 
+# install and setup webserver
+nextcloud_setup_nginx: true
+
+# where should nextcloud store data?
+nc_datadir: /var/nc-data
+
+# TLS: Slef signed or letsencrypt
+ssl_certificate_type: 'selfsigned' 
+
+# Which PHP Version?
+php_version: '7.3'
+
+# Under witch domain is it accessable?
+fqdn: ''

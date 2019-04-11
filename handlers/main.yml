@@ -1,7 +1,14 @@
 ---
-
 - name: restart redis-server
   become: yes
   systemd:
     name: redis
     state: restarted
+
+- name: restart nginx
+  become: yes
+  listen: enable coturn
+  systemd:
+    name: nginx
+    state: restarted
+

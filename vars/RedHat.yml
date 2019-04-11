@@ -19,3 +19,10 @@ nextcloud_required_packages:
 
 redis_package:
   - redis
+
+install_nginx_python3_pip:
+  - nginx
+  - python3-pip
+  - python3-netaddr
+  - firewalld
+
