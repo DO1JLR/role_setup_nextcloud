@@ -12,6 +12,9 @@ nextcloud_setup_nginx: true
 # install and configure php
 nextcloud_setup_php: true
 
+# install sql on remote server?
+nextcloud_setup_sql: true
+
 # where should nextcloud store data?
 nc_datadir: /var/nc-data
 
@@ -26,3 +29,8 @@ fqdn: ''
 
 # which database type should be choosen?
 nc_db_type: 'pgsql' # 'psql' or 'mysql'
+## mysql not implemented - you need to look at https://github.com/ReinerNippes/nextcloud.git
+
+# Is the database hostet on the nextcloud server?
+nc_db_host: localhost
+

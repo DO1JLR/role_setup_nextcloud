@@ -23,5 +23,10 @@
   include_tasks: "setup_php.yml"
   when: nextcloud_setup_php
 
+- name: install and configure psqlite
+  become: yes
+  include_tasks: "setup_psqlite.yml"
+  when: nextcloud_setup_sql and nc_db_type == 'pgsql' and nc_db_host == 'localhost')
+
 
 

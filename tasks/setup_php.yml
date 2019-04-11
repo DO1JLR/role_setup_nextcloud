@@ -99,6 +99,38 @@
   when: nc_db_type == 'mysql'
   notify: restart php-fpm
 
+- name: configure php
+  become: true
+  copy:
+    src: "{{ item.file }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+    force: true
+  with_items:
+    - { file: 'php/{{ ansible_distribution }}/fpm.php.ini',  dest: '{{ php_fpm_conf_dir[ansible_distribution] }}/php.ini' }
+  notify: restart php-fpm
 
+- name: configure php
+  become: true
+  template:
+    src: "{{ item.file }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+    force: true
+  with_items:
+    - { file: 'php/{{ ansible_distribution }}/www.conf',     dest: '{{ php_www_conf_dir[ansible_distribution] }}/www.conf' }
+    - { file: 'php/{{ ansible_distribution }}/php-fpm.conf', dest: '{{ php_fpm_conf_dir[ansible_distribution] }}/php-fpm.conf' }
+  notify: restart php-fpm
+
+- name: enable php-fpm
+  become: true
+  systemd:
+    name: "{{ php_service_name[ansible_distribution] }}"
+    state: restarted
+    enabled: true
   
 
