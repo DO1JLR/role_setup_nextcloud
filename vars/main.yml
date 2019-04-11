@@ -2,30 +2,35 @@
 
 # Some basic needed variables
 web_user:
+  'RedHat': 'nginx'
   'CentOS': 'nginx'
   'Amazon': 'nginx'
   'Ubuntu': 'www-data'
   'Debian': 'www-data'
 
 web_group:
+  'RedHat': 'nginx'
   'CentOS': 'nginx'
   'Amazon': 'nginx'
   'Ubuntu': 'www-data'
   'Debian': 'www-data'
 
 pg_user_id:
+  'RedHat': '70'
   'CentOS': '70'
   'Amazon': '70'
   'Ubuntu': '70'
   'Debian': '70'
 
 pg_group_id:
+  'RedHat': '70'
   'CentOS': '70'
   'Amazon': '70'
   'Ubuntu': '70'
   'Debian': '70'
 
 imagemagick_xml_path:
+  RedHat: /etc/ImageMagick/policy.xml
   CentOS: /etc/ImageMagick/policy.xml
   Ubuntu: /etc/ImageMagick-6/policy.xml
   Debian: /etc/ImageMagick-6/policy.xml
