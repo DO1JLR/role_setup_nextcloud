@@ -12,3 +12,9 @@
     name: nginx
     state: restarted
 
+- name: restart php-fpm
+  become: yes
+  systemd:
+    name: "{{ php_service_name[ansible_os_family] }}"
+    state: restarted
+

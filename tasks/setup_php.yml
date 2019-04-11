@@ -1,0 +1,19 @@
+---
+
+- name: Install PHP
+  become: true
+  package:
+    name: "{{ nextcloud_install_php_pkg }}"
+    state: present
+
+- name: configure php
+  copy:
+    src: "{{ item.file }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - { file: '{{ ansible_distribution }}/cli.php.ini',  dest: '{{ php_cli_conf_dir[ansible_os_family] }}/php.ini' }
+  notify: restart php-fpm
+

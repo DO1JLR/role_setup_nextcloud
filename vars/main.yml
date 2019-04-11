@@ -38,4 +38,25 @@ php_socket:
   'RedHat': '/run/php-fpm/php{{ php_version }}-fpm.sock'
   'Debian': '/run/php/php{{ php_version }}-fpm.sock'
 
+php_db_extension:
+  mysql: php{{ php_version }}-mysql
+  pgsql: php{{ php_version }}-pgsql
+
+php_service_name:
+  "RedHat": php-fpm
+  'Debian': php{{ php_version }}-fpm
+
+php_fpm_conf_dir:
+  "RedHat": /etc
+  'Debian': /etc/php/{{ php_version }}/fpm
+
+php_cli_conf_dir:
+  "RedHat": /etc
+  'Debian': /etc/php/{{ php_version }}/cli
+
+php_www_conf_dir:
+  "RedHat": /etc/php-fpm.d
+  'Debian': /etc/php/{{ php_version }}/fpm/pool.d
+
 dhparam_path:     /etc/nextcloud/dhparam/dhparam.pem
+

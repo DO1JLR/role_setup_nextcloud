@@ -16,10 +16,29 @@ nextcloud_required_packages:
  - facter
 
 redis_package: 
-  - redis-server
+ - redis-server
 
 install_nginx_python3_pip:
-  - nginx
-  - python3-pip
-  - python3-netaddr
+ - nginx
+ - python3-pip
+ - python3-netaddr
+
+nextcloud_install_php_pkg: 
+ - php{{ php_version }}-fpm
+ - php{{ php_version }}-gd
+ - "{{ php_db_extension[nc_db_type] }}"
+ - php{{ php_version }}-curl
+ - php{{ php_version }}-xml
+ - php{{ php_version }}-zip
+ - php{{ php_version }}-intl
+ - php{{ php_version }}-mbstring
+ - php{{ php_version }}-json
+ - php{{ php_version }}-bz2
+ - php{{ php_version }}-ldap
+ - php-apcu
+ - php-imagick
+ - php-smbclient
+ - php-redis
+ - php-imagick
+
 

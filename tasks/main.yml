@@ -13,9 +13,15 @@
   include_tasks: "setup_redis.yml"
   when: nextcloud_install_redis
 
-- name: improve nginx config
+- name: install and configure nginx
   become: yes
   include_tasks: "setup_nginx.yml"
   when: nextcloud_setup_nginx
+
+- name: install and configure php
+  become: yes
+  include_tasks: "setup_php.yml"
+  when: nextcloud_setup_php
+
 
 
