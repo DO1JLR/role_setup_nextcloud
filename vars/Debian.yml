@@ -41,4 +41,8 @@ nextcloud_install_php_pkg:
  - php-redis
  - php-imagick
 
+nextcloud_postgresql_client_pkg:
+ - postgresql-client
+ - python3-psycopg2
+
 

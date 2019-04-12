@@ -28,9 +28,27 @@ php_version: '7.3'
 fqdn: ''
 
 # which database type should be choosen?
-nc_db_type: 'pgsql' # 'psql' or 'mysql'
+nc_db_type: pgsql # psql or mysql
 ## mysql not implemented - you need to look at https://github.com/ReinerNippes/nextcloud.git
 
 # Is the database hostet on the nextcloud server?
 nc_db_host: localhost
 
+# Which postgres docker image?
+postgres_image:    postgres:alpine
+# the user for postgres
+postgres_user:     postgres
+# and where it is stored
+pgdata:            /var/lib/postgresql/data/pgdata
+
+# defaults path of your generated credentials (e.g. database, talk, onlyoffice)
+credential_store: /etc/nextcloud
+
+# Nextcloud database information
+nc_db: 'nextcloud'
+nc_db_user: 'nextcloud'
+nc_db_prefix: 'oc_'
+
+# You have to define the following Passwords:
+# nextcloud_postgres_secret: 'foobar123'
+# nc_db_passwd: 'foobar456'

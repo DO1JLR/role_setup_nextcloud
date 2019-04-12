@@ -1,0 +1,97 @@
+---
+
+- name: Install postgresql clinet
+  become: yes
+  package:
+    name: "{{ nextcloud_postgresql_client_pkg }}"
+    state: present
+
+- name: docker pull postgre
+  become: true
+  docker_image:
+    name: "{{ postgres_image }}"
+
+- name: create postgres group
+  become: yes
+  group:
+    name: postgres
+    gid: "{{ pg_group_id[ansible_os_family] }}"
+
+- name: create postgres user
+  become: yes
+  user:
+    name: postgres
+    uid: "{{ pg_user_id[ansible_os_family] }}"
+    group: postgres
+    system: true
+    home: /var/lib/postgresql
+    shell: /bin/bash
+    comment: PostgreSQL administrator
+    state: present
+
+- name: create data directory
+  become: yes
+  file:
+    name: "{{ pgdata }}"
+    owner: postgres
+    group: postgres
+    mode: 0700
+    state: directory
+
+- name: start postgres container
+  become: yes
+  docker_container:
+    name: postgres
+    image: "{{ postgres_image }}"
+    state: started
+    restart_policy: always
+    user: postgres:postgres
+    tty: yes
+    ports:
+     - "127.0.0.1:5432:5432"
+    env:
+        POSTGRES_PASSWORD: "{{ nextcloud_postgres_secret }}"
+        POSTGRES_USER:     "{{ postgres_user }}"
+        PGDATA:            "{{ pgdata }}"
+    volumes:
+      - "{{ pgdata }}:{{ pgdata }}:rw"
+
+
+- name: wait for db to come up
+  become: yes
+  wait_for:
+    delay: 3
+    path: /var/lib/postgresql/data/pgdata/global
+
+- name: create {{ nc_db }} db
+  become: yes
+  postgresql_db:
+    name:           "{{ nc_db }}"
+    state:          present
+    encoding:       UTF-8
+    template:       template0
+    login_host:     localhost
+    login_user:     "{{ postgres_user }}"
+    login_password: "{{ nextcloud_postgres_secret }}"
+
+- name: "Create {{ nc_db_user }} account"
+  postgresql_user:
+    encrypted:      yes
+    login_host:     localhost
+    login_user:     "{{ postgres_user }}"
+    login_password: "{{ nextcloud_postgres_secret}}"
+    db:             "{{ nc_db }}"
+    name:           "{{ nc_db_user }}"
+    password:       "{{ nc_db_passwd }}"
+
+- name: "Grant all privileges on database {{ nc_db }} to {{ nc_db_user }}"
+  postgresql_privs:
+    login_host:     localhost
+    login_user:     "{{ postgres_user }}"
+    login_password: "{{ nextcloud_postgres_secret }}"
+    db:             "postgres"
+    privs:          ALL
+    type:           database
+    obj:            "{{ nc_db }}"
+    role:           "{{ nc_db_user }}"
+

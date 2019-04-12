@@ -52,4 +52,7 @@ nextcloud_install_php_pkg:
  - php-pear
  - php-pdo
  - php-pecl-apcu
- 
+
+nextcloud_postgresql_client_pkg:
+ - postgresql10
+ - psycopg2 
