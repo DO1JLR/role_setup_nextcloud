@@ -1,0 +1,55 @@
+---
+- name: ensure "{{ dhparam_path | dirname }}" exists
+  become: true
+  file:
+    name: "{{ dhparam_path | dirname }}"
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+
+- name: create openssl dhparam (this may take a while)
+  become: true
+  openssl_dhparam:
+    path: "{{ dhparam_path }}"
+    size: "{{ dhparam_numbits | default(4096) }}"
+
+- name: use ec2 public hostname if fqdn is not defined
+  set_fact:
+    fqdn: "{{ fqdn if ( fqdn ) else facter_ec2_metadata['public-hostname'] }}"
+  when: facter_ec2_metadata is defined
+
+- name: use ansible_fqdn if fqdn is not defined
+  set_fact:
+    fqdn: "{{ fqdn if ( fqdn ) else ansible_fqdn }}"
+
+- name: create fake certificate directory
+  become: true
+  file:
+    dest: /etc/nginx/certs
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+  notify: restart nginx
+
+- name: copy TLS certificate
+  become: yes
+  copy:
+    src: "{{ nginx_custom_certificate }}"
+    dest: "/etc/nginx/certs/cert.pem"
+    owner: root
+    group: root
+    mode: 0600
+
+
+- name: copy TLS private_key
+  become: yes
+  copy:
+    src: "{{ nginx_custom_privatekey }}"
+    dest: "/etc/nginx/certs/key.pem"
+    owner: root
+    group: root
+    mode: 0600
+
+

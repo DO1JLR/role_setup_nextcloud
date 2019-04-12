@@ -56,3 +56,15 @@ nextcloud_install_php_pkg:
 nextcloud_postgresql_client_pkg:
  - postgresql10
  - psycopg2 
+
+nextcloud_python_certbot_nginx:
+ - python3
+
+nextcloud_python_certbot_pip:
+ - pyOpenSSL
+ - requests
+ - setuptools
+ - certbot-nginx
+
+
+

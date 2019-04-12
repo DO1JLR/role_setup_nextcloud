@@ -15,11 +15,19 @@ nextcloud_setup_php: true
 # install sql on remote server?
 nextcloud_setup_sql: true
 
+# should we realy handle ssl certificates?
+nextcloud_setup_tls: true
+
 # where should nextcloud store data?
 nc_datadir: /var/nc-data
 
-# TLS: Slef signed or letsencrypt
+# TLS: selfsigned or letsencrypt or custom
 ssl_certificate_type: 'selfsigned' 
+dhparam_numbits: 4096
+
+# in case of custom certificates, you need to define where they are:
+#nginx_custom_certificate: certificate.crt
+#nginx_custom_privatekey: privkey.pem
 
 # Which PHP Version?
 php_version: '7.3'
@@ -52,3 +60,4 @@ nc_db_prefix: 'oc_'
 # You have to define the following Passwords:
 # nextcloud_postgres_secret: 'foobar123'
 # nc_db_passwd: 'foobar456'
+

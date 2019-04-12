@@ -45,4 +45,9 @@ nextcloud_postgresql_client_pkg:
  - postgresql-client
  - python3-psycopg2
 
+nextcloud_python_certbot_nginx:
+ - python-certbot-nginx
+
+nextcloud_python_certbot_pip:
+ - acme
 
