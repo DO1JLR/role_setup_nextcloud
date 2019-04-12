@@ -1,0 +1,61 @@
+---
+
+- name: Install cotrun
+  become: true
+  package:
+    name: cotrun
+    state: present
+
+- name: enable coturn at boot
+  become: true
+  lineinfile:
+    path: /etc/default/coturn
+    regexp: '(.*)TURNSERVER_ENABLED=(.*)'
+    line:   'TURNSERVER_ENABLED=1'
+    backup: true
+  notify: restart coturn
+
+- name: bring /etc/turnserver.conf in place
+  become: true
+  template:
+    src:  turnserver.conf.j2
+    dest: /etc/turnserver.conf
+    owner: root
+    group: root
+    mode:  0644
+    force: true
+  notify:  restart coturn
+
+- name: enable coturn
+  become: true
+  systemd:
+    name: coturn
+    state: started
+    enabled: true
+
+- name: install talk app
+  become: yes
+  shell: sudo -u {{ web_user[ansible_distribution] }} php occ app:install spreed
+  args:
+    chdir: /var/www/nextcloud/
+    creates: /var/www/nextcloud/apps/spreed
+
+- name: enable talk app
+  become: true
+  shell: sudo -u {{ web_user[ansible_distribution] }} php occ app:enable spreed
+  args:
+    chdir: /var/www/nextcloud/
+
+- name: set stun_server
+  become: true
+  shell: sudo -u {{ web_user[ansible_distribution] }} php occ config:app:set spreed stun_servers --value '["{{ fqdn }}:5349"]'
+  args:
+    chdir: /var/www/nextcloud/
+
+- name: set turn server
+  become: true
+  shell: sudo -u {{ web_user[ansible_distribution] }} php occ config:app:set spreed turn_servers --value '[{"server":"{{ fqdn }}:5349","secret":"{{ nextcloud_talk_secret }}","protocols":"udp,tcp"}]'
+  args:
+    chdir: /var/www/nextcloud/
+    
+
