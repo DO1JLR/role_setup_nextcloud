@@ -21,6 +21,9 @@ nextcloud_setup_tls: true
 # install nextcloud talk?
 nextcloud_setup_talk: false
 
+# install nextcloud colabora
+nextcloud_setup_colabora: true
+
 # where should nextcloud store data?
 nc_datadir: /var/nc-data
 

@@ -1,5 +1,46 @@
 ---
 
+- name: add sury.org/php key
+  become: true
+  apt_key:
+    url: https://packages.sury.org/php/apt.gpg
+    state: present
+  when: ansible_distribution == 'Debian'
+
+- name: add additional repos
+  become: true
+  apt_repository:
+    repo: 'deb https://packages.sury.org/php/ {{ ansible_distribution_release }} main'
+    validate_certs: true
+    update_cache: true
+    state: present
+  when: ansible_distribution == 'Debian'
+
+- name: Add an apt key by id from a keyserver
+  become: true
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: "{{ item }}"
+  with_items:
+    - 14AA40EC0831756756D7F66C4F4EA0AAE5267A6C
+  when: ansible_distribution == 'Ubuntu'
+
+- name: add additional repos
+  become: true
+  apt_repository:
+    repo: 'deb http://ppa.launchpad.net/ondrej/php/ubuntu {{ ansible_distribution_release }} main'
+    validate_certs: true
+    update_cache: true
+    state: present
+  when: ansible_distribution == 'Ubuntu'
+
+- name: apt dist-upgrade
+  become: true
+  apt:
+    upgrade: dist
+    autoremove: true
+  when: ansible_os_family == 'Debian'
+
 - name: Install PHP
   become: true
   package:

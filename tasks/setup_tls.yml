@@ -8,6 +8,13 @@
     mode: 0755
     state: directory
 
+- name: install docker
+  become: true
+  pip:
+    name: docker
+    state: present
+    executable: pip3
+
 - name: create openssl dhparam (this may take a while)
   become: true
   openssl_dhparam:
@@ -35,7 +42,7 @@
 - name: docker pull postgres
   become: true
   docker_image:
-    name: paulczar/omgwtfssl
+    name: 'paulczar/omgwtfssl'
 
 - name: create selfsigned certifcate (doocker)
   become: true

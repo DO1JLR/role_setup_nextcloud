@@ -18,3 +18,7 @@
     name: "{{ php_service_name[ansible_os_family] }}"
     state: restarted
 
+- name: restart collabora container
+  become: yes
+  shell: docker restart collabora_online
+

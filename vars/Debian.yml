@@ -14,6 +14,10 @@ nextcloud_required_packages:
  - software-properties-common
  - apt-transport-https
  - facter
+ - python-pip
+ - python3-pip
+ - python3-psycopg2
+ - python-psycopg2
 
 redis_package: 
  - redis-server

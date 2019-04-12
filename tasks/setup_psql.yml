@@ -6,7 +6,7 @@
     name: "{{ nextcloud_postgresql_client_pkg }}"
     state: present
 
-- name: docker pull postgre
+- name: docker pull postgres
   become: true
   docker_image:
     name: "{{ postgres_image }}"

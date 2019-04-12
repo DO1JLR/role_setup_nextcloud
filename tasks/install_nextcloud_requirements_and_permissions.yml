@@ -1,4 +1,5 @@
 ---
+
 - name: Disable SELinux - because I am to lazy to develop it for RHEL
   become: true
   selinux:
@@ -56,6 +57,7 @@
     - { path: '/usr/local/tmp/cache',    owner: '{{ web_user[ansible_distribution] }}', group: 'root', mode: '1777' }
 
 - name: get uid of web_user
+  become: yes
   user:
     name: "{{ web_user[ansible_distribution] }}"
   register: web_user_id
@@ -141,5 +143,127 @@
     - PDF
     - XPS
 
+- name: remove debian repo docker if present
+  become: true
+  apt:
+    name:
+      - docker
+      - docker-engine
+      - docker.io
+    state: absent
+  when: ansible_os_family == 'Debian'
+    
+- name: install needed packages
+  become: true
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - python3-pip
+      - software-properties-common
+    state: latest
+  when: ansible_os_family == 'Debian'
+
+- name: add docker key
+  become: true
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+  when: ansible_distribution == 'Debian'
+
+- name: add additional docker repo
+  become: true
+  apt_repository:
+    repo: 'deb https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable'
+    validate_certs: true
+    update_cache: true
+    state: present
+  when: ansible_distribution == 'Debian'
+
+- name: add docker key
+  become: true
+  apt_key:
+    url: "{{ item }}"
+    state: present
+  with_items: 
+    - https://download.docker.com/linux/ubuntu/gpg
+  when: ansible_distribution == 'Ubuntu'
+
+- name: add additional docker repo
+  become: true
+  apt_repository:
+    repo: "{{ item }}"
+    validate_certs: true
+    update_cache: true
+    state: present
+  with_items:
+    - deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+  when: ansible_distribution == 'Ubuntu'
+
+- name: install docker
+  become: true
+  apt:
+    name: docker-ce
+    state: latest
+  when: ansible_os_family == 'Debian'
+
+- name: add docker repo
+  become: true
+  get_url: 
+    url: https://download.docker.com/linux/centos/docker-ce.repo
+    dest: /etc/yum.repos.d/docker.repo
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_os_family == 'RedHat'
+
+- name: install docker
+  become: true
+  yum: 
+    name: docker-ce
+    state: latest
+  when: ansible_os_family == 'RedHat'
+
+- name: fix docker backend for collabora
+  become: true
+  lineinfile:
+    path: /etc/systemd/system/multi-user.target.wants/docker.service
+    regexp: '^ExecStart='
+    line: 'ExecStart=/usr/bin/dockerd --storage-driver=devicemapper'
+  register: systemdchanged
+  when: ansible_os_family == 'RedHat'
+
+- name: restart docker
+  become: true
+  systemd:
+    name: docker
+    daemon_reload: yes
+    state: restarted
+  when: systemdchanged.changed and ansible_os_family == 'RedHat'
+
+- name: install python docker
+  become: true
+  pip:
+    name:
+      - pip
+      - docker
+    state: latest
+    executable: pip3
+
+- name: enable docker
+  become: true
+  systemd:
+    name:          docker
+    state:         started
+    enabled:       true
+    daemon_reload: yes
+
+- name: add to group docker
+  become: true
+  user:
+    name: '{{ ansible_env.SUDO_USER }}'
+    append: true
+    groups: docker
+  when: ansible_env.SUDO_USER | default('root') != 'root'
 
 

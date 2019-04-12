@@ -52,4 +52,9 @@
   include_tasks: "setup_talk.yml"
   when: nextcloud_setup_talk and ansible_os_family != 'RedHat' 
 
+- name: install nextcloud colabora
+  become: yes
+  include_tasks: "setup_colabora.yml"
+  when: nextcloud_setup_colabora and ansible_os_family != 'RedHat' 
+
 
