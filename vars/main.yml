@@ -1,5 +1,9 @@
 ---
 
+# where is nextcloud?
+next_archive: 'https://download.nextcloud.com/server/releases/latest.tar.bz2'
+
+
 # Some basic needed variables
 web_user:
   'RedHat': 'nginx'

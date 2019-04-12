@@ -43,6 +43,10 @@
   include_tasks: "setup_custom_tls.yml"
   when: ssl_certificate_type == 'custom' and nextcloud_setup_tls 
 
+- name: install and nextcloud
+  become: yes
+  include_tasks: "install_nextcloud.yml"
+
 - name: install nextcloud talk
   become: yes
   include_tasks: "setup_talk.yml"
