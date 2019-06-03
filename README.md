@@ -15,7 +15,10 @@ or
  Warning
 -------
 
+**WORK IN PROGRESS - BE CAREFUL!!!**
 Only testet with Debian 9
+
+
 
  Configuration
 -------------
